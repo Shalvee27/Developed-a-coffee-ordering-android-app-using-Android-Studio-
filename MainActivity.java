@@ -1,16 +1,17 @@
-package com.example.android.courtcounter;
+package com.example.android.justjava;
 
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.support.v7.app.ActionBarActivity;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.TextView;
 
-
+/**
+ * This app displays an order form to order coffee.
+ */
 public class MainActivity extends ActionBarActivity {
-    int scoreTeamA = 0;
-    int scoreTeamB = 0;
+    int quantity = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,100 +19,88 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+    /**
+     * This method is called when the plus button is clicked.
+     */
+    public void increment(View view) {
+        quantity++;
+        displayQuantity(quantity);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+    /**
+     * This method is called when the minus button is clicked.
+     */
+    public void decrement(View view) {
+        if (quantity == 0) {
+            return;
         }
-
-        return super.onOptionsItemSelected(item);
+        quantity--;
+        displayQuantity(quantity);
     }
 
     /**
-     * Increase the score for Team A by 3 points.
+     * This method is called when the order button is clicked.
      */
-    public void addThreeForTeamA(View v) {
-        scoreTeamA = scoreTeamA + 3;
-        displayForTeamA(scoreTeamA);
-    }
-
-
-    /**
-     * Increase the score for Team A by 2 points.
-     */
-    public void addTwoForTeamA(View v) {
-        scoreTeamA = scoreTeamA + 2;
-        displayForTeamA(scoreTeamA);
-    }
-
-    /**
-     * Increase the score for Team A by 1 point.
-     */
-    public void addOneForTeamA(View v) {
-        scoreTeamA = scoreTeamA + 1;
-        displayForTeamA(scoreTeamA);
+    public void submitOrder(View view) {
+        //Find the user's name
+        EditText nameField = (EditText) findViewById(R.id.name_field);
+        String value = nameField.getText().toString();
+        //Figure out if the user wants whipped cream topping
+        CheckBox whippedCreamCheckBox = (CheckBox) findViewById(R.id.whipped_cream_checkbox);
+        boolean hasWhippedCream = whippedCreamCheckBox.isChecked();
+        //Figure out if the user wants chocolate topping
+        CheckBox chocolateCheckBox = (CheckBox) findViewById(R.id.chocolate_checkbox);
+        boolean hasChocolate = chocolateCheckBox.isChecked();
+        int price = calculatePrice(hasWhippedCream, hasChocolate);
+        String priceMessage = createOrderSummary(value, price, hasWhippedCream, hasChocolate);
+        displayMessage(priceMessage);
     }
 
     /**
-     * Increase the score for Team B by 3 points.
+     * This method calculates the total price.
      */
-    public void addThreeForTeamB(View v) {
-        scoreTeamB = scoreTeamB + 3;
-        displayForTeamB(scoreTeamB);
+    private int calculatePrice(boolean addWhippedCream, boolean addChocolate) {
+        //Price of 1 cup of coffee
+        int basePrice = 5;
+        //Add $1 if the user wants whipped cream
+        if (addWhippedCream) {
+            basePrice = basePrice + 1;
+        }
+        //Add $2 if the user wants chocolate
+        if (addChocolate) {
+            basePrice = basePrice + 2;
+        }
+        //Calculate the total order price
+        return quantity * basePrice;
     }
 
     /**
-     * Increase the score for Team B by 2 points.
+     * This method creates a summary of order.
      */
-    public void addTwoForTeamB(View v) {
-        scoreTeamB = scoreTeamB + 2;
-        displayForTeamB(scoreTeamB);
+    private String createOrderSummary(String name, int price, boolean addWhippedCream, boolean addChocolate) {
+        String priceMessage = "Name: " + name;
+        priceMessage += "\nAdd whipped cream? " + addWhippedCream;
+        priceMessage += "\nAdd chocolate? " + addChocolate;
+        priceMessage += "\nQuantity: " + quantity;
+        priceMessage += "\nTotal: $" + price;
+        priceMessage += "\nThank you!";
+        return priceMessage;
     }
 
     /**
-     * Increase the score for Team B by 1 point.
+     * This method displays the given quantity value on the screen.
      */
-    public void addOneForTeamB(View v) {
-        scoreTeamB = scoreTeamB + 1;
-        displayForTeamB(scoreTeamB);
+    private void displayQuantity(int numberOfCoffees) {
+        TextView quantityTextView = (TextView) findViewById(
+                R.id.quantity_text_view);
+        quantityTextView.setText("" + numberOfCoffees);
     }
 
     /**
-     * Reset the score for both Teams to 0.
+     * This method displays the given text on the screen.
      */
-    public void resetScore(View v) {
-        scoreTeamA = 0;
-        scoreTeamB = 0;
-        displayForTeamA(scoreTeamA);
-        displayForTeamB(scoreTeamB);
-    }
-
-    /**
-     * Displays the given score for Team A.
-     */
-    public void displayForTeamA(int score) {
-        TextView scoreView = (TextView) findViewById(R.id.team_a_score);
-        scoreView.setText(String.valueOf(score));
-    }
-
-    /**
-     * Displays the given score for Team B.
-     */
-    public void displayForTeamB(int score) {
-        TextView scoreView = (TextView) findViewById(R.id.team_b_score);
-        scoreView.setText(String.valueOf(score));
+    private void displayMessage(String message) {
+        TextView OrderSummaryTextView = (TextView) findViewById(R.id.order_summary_text_view);
+        OrderSummaryTextView.setText(message);
     }
 }
