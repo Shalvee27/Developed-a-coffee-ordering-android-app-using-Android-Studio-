@@ -1,7 +1,7 @@
-Built a basketball score counter Android app using Android Studio  
-    *** Built user interface using View and ViewGroup objects  
-    *** Created Java Codes for Button Clicks in XML file to update the scores  
-    *** This Android app works successfully to count scores for basketball games  
+•	Built an interactive coffee ordering android app using Android Studio  
+**** Designed GUI using views, checkboxes and buttons to display the app  
+**** Created Java codes for the click events of checkboxes and buttons to update the order  
+**** This app makes it easier to summarize the coffee ordering  
 
 Feel free to download the app in the following link.  
 
