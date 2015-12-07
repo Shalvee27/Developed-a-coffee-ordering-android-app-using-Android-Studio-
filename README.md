@@ -1,4 +1,4 @@
-###	Developed a coffee ordering android app using Android Studio                                                    07/2015
+###	Developed a coffee ordering android app using Android Studio                                                
 *	Designed and built the GUI for the app using views, checkboxes and buttons 
 *	Created Java codes for the click events of checkboxes and buttons to update the order
 *	This app works successfully to summarize the coffee ordering
